@@ -102,6 +102,7 @@ function renderMenu() {
 
     <div class="mode-buttons">
       <button onclick="startPortDrill()" class="btn btn-port">PORT DRILL (Most Tested!)</button>
+      <button onclick="showPortReference()" class="btn btn-portref">PORT REFERENCE</button>
       <button onclick="startRandomMix()" class="btn btn-mix">RANDOM MIX (All 334)</button>
       <button onclick="startWeakAreas()" class="btn btn-weak">WEAK AREAS</button>
     </div>
@@ -510,6 +511,139 @@ function selectPortOption(idx) {
   }
   saveProgress();
   renderPortDrill();
+}
+
+function showPortReference() {
+  state.mode = 'portref';
+  // Exact match to PDF "MASTER PORT REFERENCE TABLE"
+  // gotcha = true for orange-highlighted "frequently missed" ports
+  const ports = [
+    {port:"7",service:"Echo",proto:"TCP/UDP",notes:"Echoes data sent to it",gotcha:false},
+    {port:"20",service:"FTP Data",proto:"TCP",notes:"FTP data transfer",gotcha:false},
+    {port:"21",service:"FTP Control",proto:"TCP",notes:"FTP command channel",gotcha:false},
+    {port:"22",service:"SSH/SCP/SFTP",proto:"TCP",notes:"Secure shell",gotcha:false},
+    {port:"23",service:"Telnet",proto:"TCP",notes:"Unencrypted remote access",gotcha:false},
+    {port:"25",service:"SMTP",proto:"TCP",notes:"Sending email",gotcha:false},
+    {port:"49",service:"TACACS+",proto:"TCP",notes:"AAA protocol (Cisco)",gotcha:true},
+    {port:"53",service:"DNS",proto:"TCP/UDP",notes:"Name resolution",gotcha:false},
+    {port:"67",service:"DHCP Server",proto:"UDP",notes:"IP assignment (server)",gotcha:false},
+    {port:"68",service:"DHCP Client",proto:"UDP",notes:"IP assignment (client)",gotcha:true},
+    {port:"69",service:"TFTP",proto:"UDP",notes:"Trivial FTP (no auth)",gotcha:true},
+    {port:"79",service:"Finger",proto:"TCP",notes:"User info (legacy)",gotcha:true},
+    {port:"80",service:"HTTP",proto:"TCP",notes:"Web traffic",gotcha:false},
+    {port:"88",service:"Kerberos",proto:"TCP/UDP",notes:"Authentication (AD)",gotcha:true},
+    {port:"110",service:"POP3",proto:"TCP",notes:"Retrieve email",gotcha:false},
+    {port:"111",service:"RPCBind",proto:"TCP/UDP",notes:"RPC port mapping",gotcha:true},
+    {port:"113",service:"Ident",proto:"TCP",notes:"User identification",gotcha:true},
+    {port:"119",service:"NNTP",proto:"TCP",notes:"Usenet news",gotcha:true},
+    {port:"123",service:"NTP",proto:"UDP",notes:"Time sync",gotcha:false},
+    {port:"135",service:"MS-RPC",proto:"TCP",notes:"RPC endpoint mapper",gotcha:false},
+    {port:"137",service:"NetBIOS Name",proto:"UDP",notes:"Name service",gotcha:false},
+    {port:"138",service:"NetBIOS DGM",proto:"UDP",notes:"Datagram service",gotcha:false},
+    {port:"139",service:"NetBIOS SSN",proto:"TCP",notes:"Session (SMB/NetBIOS)",gotcha:false},
+    {port:"143",service:"IMAP",proto:"TCP",notes:"Email access",gotcha:false},
+    {port:"161",service:"SNMP",proto:"UDP",notes:"Network management",gotcha:false},
+    {port:"162",service:"SNMP Trap",proto:"UDP",notes:"SNMP alerts",gotcha:true},
+    {port:"179",service:"BGP",proto:"TCP",notes:"Internet routing",gotcha:true},
+    {port:"389",service:"LDAP",proto:"TCP/UDP",notes:"Directory access",gotcha:false},
+    {port:"443",service:"HTTPS",proto:"TCP",notes:"Encrypted web",gotcha:false},
+    {port:"445",service:"SMB",proto:"TCP",notes:"File sharing (direct)",gotcha:false},
+    {port:"464",service:"Kerberos PW",proto:"TCP/UDP",notes:"Password change",gotcha:true},
+    {port:"500",service:"IKE/ISAKMP",proto:"UDP",notes:"IPSec key exchange",gotcha:true},
+    {port:"512",service:"rexec",proto:"TCP",notes:"Remote exec (legacy)",gotcha:true},
+    {port:"513",service:"rlogin",proto:"TCP",notes:"Remote login (legacy)",gotcha:true},
+    {port:"514",service:"rsh/Syslog",proto:"TCP/UDP",notes:"Shell/logging",gotcha:true},
+    {port:"515",service:"LPD",proto:"TCP",notes:"Print daemon",gotcha:true},
+    {port:"520",service:"RIP",proto:"UDP",notes:"Routing protocol",gotcha:true},
+    {port:"587",service:"SMTP Submit",proto:"TCP",notes:"Auth email submission",gotcha:false},
+    {port:"636",service:"LDAPS",proto:"TCP",notes:"Encrypted LDAP",gotcha:false},
+    {port:"873",service:"Rsync",proto:"TCP",notes:"File sync",gotcha:true},
+    {port:"993",service:"IMAPS",proto:"TCP",notes:"Encrypted IMAP",gotcha:false},
+    {port:"995",service:"POP3S",proto:"TCP",notes:"Encrypted POP3",gotcha:false},
+    {port:"1080",service:"SOCKS",proto:"TCP",notes:"Proxy protocol",gotcha:true},
+    {port:"1099",service:"Java RMI",proto:"TCP",notes:"Java remote method",gotcha:true},
+    {port:"1433",service:"MSSQL",proto:"TCP",notes:"SQL Server",gotcha:false},
+    {port:"1434",service:"MSSQL Browser",proto:"UDP",notes:"SQL Server discovery",gotcha:true},
+    {port:"1521",service:"Oracle TNS",proto:"TCP",notes:"Oracle DB",gotcha:false},
+    {port:"1723",service:"PPTP",proto:"TCP",notes:"VPN tunnel",gotcha:true},
+    {port:"1985",service:"HSRP",proto:"UDP",notes:"Router redundancy",gotcha:true},
+    {port:"2049",service:"NFS",proto:"TCP/UDP",notes:"Network filesystem",gotcha:false},
+    {port:"3128",service:"Squid Proxy",proto:"TCP",notes:"HTTP proxy",gotcha:true},
+    {port:"3268",service:"GC LDAP",proto:"TCP",notes:"AD Global Catalog",gotcha:true},
+    {port:"3269",service:"GC LDAPS",proto:"TCP",notes:"AD GC encrypted",gotcha:true},
+    {port:"3306",service:"MySQL",proto:"TCP",notes:"MySQL DB",gotcha:false},
+    {port:"3389",service:"RDP",proto:"TCP",notes:"Remote Desktop",gotcha:false},
+    {port:"4444",service:"Metasploit",proto:"TCP",notes:"Default handler",gotcha:true},
+    {port:"5060",service:"SIP",proto:"TCP/UDP",notes:"VoIP signaling",gotcha:false},
+    {port:"5061",service:"SIP TLS",proto:"TCP",notes:"Encrypted VoIP",gotcha:true},
+    {port:"5432",service:"PostgreSQL",proto:"TCP",notes:"PostgreSQL DB",gotcha:false},
+    {port:"5900",service:"VNC",proto:"TCP",notes:"Remote desktop",gotcha:false},
+    {port:"5985",service:"WinRM HTTP",proto:"TCP",notes:"PS remoting",gotcha:false},
+    {port:"5986",service:"WinRM HTTPS",proto:"TCP",notes:"PS remoting (enc)",gotcha:false},
+    {port:"6000",service:"X11",proto:"TCP",notes:"X Window System",gotcha:true},
+    {port:"6379",service:"Redis",proto:"TCP",notes:"Key-value store",gotcha:true},
+    {port:"8080",service:"HTTP Alt",proto:"TCP",notes:"Alt HTTP/proxy",gotcha:false},
+    {port:"8443",service:"HTTPS Alt",proto:"TCP",notes:"Alt HTTPS",gotcha:false},
+    {port:"9200",service:"Elasticsearch",proto:"TCP",notes:"Search engine",gotcha:true},
+    {port:"27017",service:"MongoDB",proto:"TCP",notes:"NoSQL DB",gotcha:true},
+  ];
+
+  const app = document.getElementById('app');
+  let html = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">MASTER PORT REFERENCE</span>
+      <span class="quiz-score">${ports.length} ports</span>
+    </div>
+    <p class="port-ref-subtitle">Port numbers are THE most tested topic. <span class="gotcha-label">Orange</span> = gotcha ports that trip up candidates.</p>
+    <div class="port-ref-search">
+      <input type="text" id="port-search" placeholder="Search port, service, or notes..." oninput="filterPorts()">
+    </div>
+    <div class="port-ref-table">
+      <div class="port-ref-header">
+        <span>Port</span>
+        <span>Service</span>
+        <span>Proto</span>
+        <span>Notes</span>
+      </div>
+      <div id="port-ref-body">`;
+
+  html += buildPortRows(ports, '');
+
+  html += `</div></div>`;
+  app.innerHTML = html;
+
+  window._portRefData = ports;
+}
+
+function buildPortRows(ports, filter) {
+  const f = filter.toLowerCase();
+  let html = '';
+  let filtered = ports;
+  if (f) {
+    filtered = ports.filter(p =>
+      p.port.includes(f) || p.service.toLowerCase().includes(f) ||
+      p.proto.toLowerCase().includes(f) || p.notes.toLowerCase().includes(f)
+    );
+  }
+  filtered.forEach(p => {
+    html += `
+      <div class="port-ref-row${p.gotcha ? ' gotcha' : ''}">
+        <span class="port-ref-port">${p.port}</span>
+        <span class="port-ref-service">${p.service}</span>
+        <span class="port-ref-proto">${p.proto}</span>
+        <span class="port-ref-notes">${p.notes}</span>
+      </div>`;
+  });
+  if (filtered.length === 0) {
+    html += `<div class="port-ref-empty">No matches found</div>`;
+  }
+  return html;
+}
+
+function filterPorts() {
+  const val = document.getElementById('port-search').value;
+  document.getElementById('port-ref-body').innerHTML = buildPortRows(window._portRefData, val);
 }
 
 function goMenu() {

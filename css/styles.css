@@ -257,6 +257,107 @@ body {
 .port-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .port-option { text-align: center; font-size: 1.2em; font-weight: 700; padding: 18px; }
 
+/* PORT REFERENCE BUTTON */
+.btn-portref {
+  background: linear-gradient(135deg, #f7c948, #ff6b35);
+  color: #000;
+}
+
+/* PORT REFERENCE PAGE */
+.port-ref-subtitle {
+  color: #888;
+  font-size: 0.85em;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.gotcha-label {
+  color: #ff6b35;
+  font-weight: 700;
+}
+
+.port-ref-search {
+  margin-bottom: 16px;
+}
+.port-ref-search input {
+  width: 100%;
+  background: #1a1f2e;
+  border: 1px solid #333;
+  color: #eee;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 1em;
+  outline: none;
+}
+.port-ref-search input:focus { border-color: #7b2ff7; }
+.port-ref-search input::placeholder { color: #555; }
+
+.port-ref-table {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+}
+.port-ref-header {
+  display: grid;
+  grid-template-columns: 70px 1fr 80px 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #1a1f2e;
+  font-weight: 700;
+  font-size: 0.78em;
+  color: #7b2ff7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #2a3444;
+}
+.port-ref-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 80px 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  background: #111827;
+  border-bottom: 1px solid #1a1f2e;
+  transition: background 0.15s;
+}
+.port-ref-row:last-child { border-bottom: none; }
+.port-ref-row:hover { background: #141c2e; }
+
+/* Gotcha (orange) rows */
+.port-ref-row.gotcha {
+  background: #1a1308;
+  border-left: 3px solid #ff6b35;
+}
+.port-ref-row.gotcha:hover { background: #221a0a; }
+.port-ref-row.gotcha .port-ref-port { color: #ff6b35; }
+.port-ref-row.gotcha .port-ref-service { color: #f7c948; }
+
+.port-ref-port {
+  font-weight: 800;
+  font-size: 1.05em;
+  color: #00d2ff;
+  font-variant-numeric: tabular-nums;
+}
+.port-ref-service {
+  font-size: 0.9em;
+  color: #e0e0e0;
+  font-weight: 600;
+}
+.port-ref-proto {
+  font-size: 0.78em;
+  color: #888;
+  font-weight: 600;
+}
+.port-ref-notes {
+  font-size: 0.82em;
+  color: #999;
+}
+.port-ref-empty {
+  text-align: center;
+  color: #555;
+  padding: 30px;
+  font-size: 0.9em;
+}
+
 /* RESULTS */
 .results-card {
   background: #111827;
@@ -473,6 +574,25 @@ button { -webkit-tap-highlight-color: transparent; }
   .port-options { grid-template-columns: 1fr 1fr; gap: 8px; }
   .port-option { padding: 16px 10px; font-size: 1em; min-height: 52px; word-break: break-word; }
 
+  /* Port reference */
+  .port-ref-subtitle { font-size: 0.8em; }
+  .port-ref-header {
+    grid-template-columns: 50px 1fr 60px;
+    font-size: 0.7em;
+    padding: 8px 10px;
+  }
+  .port-ref-header span:last-child { display: none; }
+  .port-ref-row {
+    grid-template-columns: 50px 1fr 60px;
+    padding: 9px 10px;
+    gap: 6px;
+  }
+  .port-ref-notes { display: none; }
+  .port-ref-port { font-size: 0.95em; }
+  .port-ref-service { font-size: 0.82em; }
+  .port-ref-proto { font-size: 0.72em; }
+  .port-ref-search input { padding: 10px 12px; font-size: 0.9em; }
+
   /* Results */
   .results-card { padding: 24px 16px; margin-top: 20px; border-radius: 12px; }
   .results-score h1 { font-size: 2.4em; }
@@ -510,4 +630,8 @@ button { -webkit-tap-highlight-color: transparent; }
   .quiz-title { font-size: 0.75em; }
   #sync-input { width: 120px; }
   .results-score h1 { font-size: 2em; }
+  .port-ref-header { grid-template-columns: 45px 1fr 50px; }
+  .port-ref-row { grid-template-columns: 45px 1fr 50px; padding: 8px; }
+  .port-ref-port { font-size: 0.88em; }
+  .port-ref-service { font-size: 0.78em; }
 }
