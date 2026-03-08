@@ -108,10 +108,11 @@ function renderMenu() {
 
     <h2 class="section-title">REFERENCE TABLES</h2>
     <p class="hint">All cheat sheets from the exam bible.</p>
-    <div class="ref-buttons">
+    <div class="ref-buttons ref-buttons-4">
       <button onclick="showPortReference()" class="btn btn-ref btn-ref-ports">PORTS</button>
       <button onclick="showCryptoReference()" class="btn btn-ref btn-ref-crypto">CRYPTO</button>
-      <button onclick="showIISReference()" class="btn btn-ref btn-ref-iis">IIS MAPPING</button>
+      <button onclick="showNetworkReference()" class="btn btn-ref btn-ref-net">NETWORKING</button>
+      <button onclick="showIISReference()" class="btn btn-ref btn-ref-iis">IIS / EXAM</button>
     </div>
 
     <h2 class="section-title">STUDY BATCHES</h2>
@@ -825,6 +826,246 @@ function showIISReference() {
           <span class="ref-muted">Strategy</span><span class="ref-safe">ANSWER EVERY QUESTION - NO PENALTY</span>
         </div>
       </div>
+    </div>`;
+}
+
+function showNetworkReference() {
+  state.mode = 'netref';
+  const app = document.getElementById('app');
+
+  app.innerHTML = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">NETWORKING REFERENCE</span>
+      <span></span>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">IP Address Classes</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-5">
+          <span>Class</span><span>Range</span><span>Default Mask</span><span>CIDR</span><span>Hosts</span>
+        </div>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">A</span><span>1.0.0.0 - 126.x.x.x</span><span>255.0.0.0</span><span class="ref-accent">/8</span><span>16.7M</span>
+        </div>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">B</span><span>128.0.0.0 - 191.x.x.x</span><span>255.255.0.0</span><span class="ref-accent">/16</span><span>65,534</span>
+        </div>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">C</span><span>192.0.0.0 - 223.x.x.x</span><span>255.255.255.0</span><span class="ref-accent">/24</span><span>254</span>
+        </div>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">D</span><span>224.0.0.0 - 239.x.x.x</span><span>-</span><span>-</span><span class="ref-warn">Multicast</span>
+        </div>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">E</span><span>240.0.0.0 - 255.x.x.x</span><span>-</span><span>-</span><span class="ref-muted">Reserved</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Private IP Ranges (RFC 1918)</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Class</span><span>Range</span><span>CIDR</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">A</span><span>10.0.0.0 - 10.255.255.255</span><span class="ref-accent">10.0.0.0/8</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">B</span><span>172.16.0.0 - 172.31.255.255</span><span class="ref-accent">172.16.0.0/12</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">C</span><span>192.168.0.0 - 192.168.255.255</span><span class="ref-accent">192.168.0.0/16</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Special Addresses</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Address</span><span>Name</span><span>Purpose</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">127.0.0.0/8</span><span>Loopback</span><span>localhost testing</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">169.254.0.0/16</span><span>APIPA</span><span class="ref-danger">Auto-assign when DHCP fails</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">0.0.0.0</span><span>Unspecified</span><span>Default route / all interfaces</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">255.255.255.255</span><span>Broadcast</span><span>All hosts on local network</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">IPv4 vs IPv6</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Feature</span><span>IPv4</span><span>IPv6</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">Address Size</span><span class="ref-accent">32-bit</span><span class="ref-accent">128-bit</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">Format</span><span>Dotted decimal<br>192.168.1.1</span><span>Colon hex<br>2001:db8::1</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">Addresses</span><span>4.3 billion</span><span>340 undecillion</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">Header</span><span>20-60 bytes (variable)</span><span>40 bytes (fixed)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">IPsec</span><span>Optional</span><span class="ref-safe">Built-in</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">Broadcast</span><span>Yes</span><span class="ref-warn">No (uses multicast)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">ARP</span><span>Yes</span><span class="ref-warn">No (uses NDP)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-muted">NAT</span><span>Common</span><span>Not needed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">IPv6 Gotchas</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-2">
+          <span>Type</span><span>Details</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">::1</span><span>Loopback (like 127.0.0.1)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">::</span><span>Unspecified (like 0.0.0.0)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">fe80::/10</span><span>Link-local (auto-configured, like APIPA)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">fc00::/7</span><span>Unique local (like RFC 1918 private)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">ff00::/8</span><span>Multicast (replaces broadcast)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">::ffff:0:0/96</span><span>IPv4-mapped (e.g. ::ffff:192.168.1.1)</span>
+        </div>
+      </div>
+      <p class="ref-note">IPv6 uses NDP (Neighbor Discovery Protocol) instead of ARP. Attacks: RA spoofing, NDP poisoning.</p>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">SSID & Wireless</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-2">
+          <span>Property</span><span>Value</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">SSID Max Length</span><span class="ref-accent">32 bytes (characters)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Hidden SSID</span><span>Not broadcast but still in probe requests - <span class="ref-warn">NOT secure</span></span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">WPA2-PSK Key</span><span class="ref-accent">8-63 characters</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">802.11 Channels (2.4GHz)</span><span class="ref-accent">1, 6, 11</span> (non-overlapping)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">MAC Address</span><span class="ref-accent">48-bit</span> (6 bytes, hex pairs: AA:BB:CC:DD:EE:FF)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">BSSID</span><span>AP's MAC address</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Subnet Cheat Sheet</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>CIDR</span><span>Mask</span><span>Hosts</span><span>Use</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/32</span><span>255.255.255.255</span><span>1</span><span>Single host</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/31</span><span>255.255.255.254</span><span>2</span><span>Point-to-point link</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/30</span><span>255.255.255.252</span><span>2</span><span>Smallest usable subnet</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/29</span><span>255.255.255.248</span><span>6</span><span>Small office</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/28</span><span>255.255.255.240</span><span>14</span><span>Small subnet</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/27</span><span>255.255.255.224</span><span>30</span><span>Medium subnet</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/26</span><span>255.255.255.192</span><span>62</span><span></span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/25</span><span>255.255.255.128</span><span>126</span><span></span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/24</span><span>255.255.255.0</span><span>254</span><span>Class C default</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/16</span><span>255.255.0.0</span><span>65,534</span><span>Class B default</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/8</span><span>255.0.0.0</span><span>16.7M</span><span>Class A default</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">/0</span><span>0.0.0.0</span><span>All</span><span class="ref-warn">Entire internet</span>
+        </div>
+      </div>
+      <p class="ref-note">Usable hosts = 2^(32-CIDR) - 2 (subtract network + broadcast). Exception: /31 has 2 usable (RFC 3021).</p>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">TCP/IP Model vs OSI</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>OSI #</span><span>OSI Layer</span><span>TCP/IP</span><span>Protocols</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">7</span><span>Application</span><span rowspan="3" class="ref-highlight">Application</span><span>HTTP, FTP, DNS, SMTP, SSH</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">6</span><span>Presentation</span><span class="ref-highlight">Application</span><span>SSL/TLS, JPEG, ASCII</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">5</span><span>Session</span><span class="ref-highlight">Application</span><span>NetBIOS, RPC, SOCKS</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">4</span><span>Transport</span><span class="ref-highlight">Transport</span><span>TCP, UDP</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">3</span><span>Network</span><span class="ref-highlight">Internet</span><span>IP, ICMP, IPsec, ARP</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">2</span><span>Data Link</span><span class="ref-highlight">Network Access</span><span>Ethernet, Wi-Fi, PPP</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">1</span><span>Physical</span><span class="ref-highlight">Network Access</span><span>Cables, hubs, signals</span>
+        </div>
+      </div>
+      <p class="ref-note">Remember: Please Do Not Throw Sausage Pizza Away (layers 1-7). TCP/IP has 4 layers: Network Access, Internet, Transport, Application.</p>
     </div>`;
 }
 

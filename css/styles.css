@@ -264,6 +264,9 @@ body {
   gap: 8px;
   margin-bottom: 25px;
 }
+.ref-buttons-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
 .btn-ref {
   padding: 14px 8px;
   font-size: 0.85em;
@@ -275,6 +278,10 @@ body {
 }
 .btn-ref-crypto {
   background: linear-gradient(135deg, #a78bfa, #7b2ff7);
+  color: #fff;
+}
+.btn-ref-net {
+  background: linear-gradient(135deg, #2ed573, #0a8f3c);
   color: #fff;
 }
 .btn-ref-iis {
@@ -599,6 +606,7 @@ button { -webkit-tap-highlight-color: transparent; }
 
   /* Reference buttons */
   .ref-buttons { gap: 6px; margin-bottom: 18px; }
+  .ref-buttons-4 { grid-template-columns: 1fr 1fr; }
   .btn-ref { padding: 12px 6px; font-size: 0.78em; }
 
   /* Reference tables */
