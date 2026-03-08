@@ -659,8 +659,9 @@ button { -webkit-tap-highlight-color: transparent; }
   /* Reference tables */
   .ref-section { margin-bottom: 18px; }
   .ref-section-title { font-size: 0.85em; }
-  .ref-table-header { font-size: 0.68em; padding: 8px 10px; }
-  .ref-table-row { font-size: 0.8em; padding: 8px 10px; }
+  .ref-table-header { font-size: 0.65em; padding: 6px 8px; gap: 4px; }
+  .ref-table-row { font-size: 0.78em; padding: 8px 8px; gap: 4px; }
+  .ref-cols-2 { grid-template-columns: 1fr 1fr; }
   .ref-cols-3 { grid-template-columns: 60px 1fr 1fr; }
   .ref-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
   .ref-cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
@@ -714,23 +715,19 @@ button { -webkit-tap-highlight-color: transparent; }
   .port-options { grid-template-columns: 1fr 1fr; gap: 8px; }
   .port-option { padding: 16px 10px; font-size: 1em; min-height: 52px; word-break: break-word; }
 
-  /* Port reference */
+  /* Port reference - stack on mobile */
   .port-ref-subtitle { font-size: 0.8em; }
-  .port-ref-header {
-    grid-template-columns: 50px 1fr 60px;
-    font-size: 0.7em;
-    padding: 8px 10px;
-  }
-  .port-ref-header span:last-child { display: none; }
+  .port-ref-header { display: none; }
   .port-ref-row {
-    grid-template-columns: 50px 1fr 60px;
-    padding: 9px 10px;
-    gap: 6px;
+    grid-template-columns: 1fr;
+    padding: 10px 12px;
+    gap: 2px;
   }
-  .port-ref-notes { display: none; }
-  .port-ref-port { font-size: 0.95em; }
-  .port-ref-service { font-size: 0.82em; }
+  .port-ref-row { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+  .port-ref-port { font-size: 1em; min-width: 50px; }
+  .port-ref-service { font-size: 0.88em; font-weight: 700; }
   .port-ref-proto { font-size: 0.72em; }
+  .port-ref-notes { font-size: 0.75em; width: 100%; color: #777; }
   .port-ref-search input { padding: 10px 12px; font-size: 0.9em; }
 
   /* Results */
@@ -770,8 +767,9 @@ button { -webkit-tap-highlight-color: transparent; }
   .quiz-title { font-size: 0.75em; }
   #sync-input { width: 120px; }
   .results-score h1 { font-size: 2em; }
-  .port-ref-header { grid-template-columns: 45px 1fr 50px; }
-  .port-ref-row { grid-template-columns: 45px 1fr 50px; padding: 8px; }
-  .port-ref-port { font-size: 0.88em; }
-  .port-ref-service { font-size: 0.78em; }
+  .ref-table-header { font-size: 0.6em; }
+  .ref-table-row { font-size: 0.72em; }
+  .ref-cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .ref-cols-5 .ref-table-row span:nth-child(3) { display: none; }
+  .ref-cols-5 .ref-table-header span:nth-child(3) { display: none; }
 }
