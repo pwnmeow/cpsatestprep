@@ -69,6 +69,10 @@ function saveProgress() {
   localStorage.setItem('cpsa_progress', JSON.stringify(state.progress));
   localStorage.setItem('cpsa_stats', JSON.stringify(state.stats));
   localStorage.setItem('cpsa_port_best', state.portDrillBest.toString());
+  // Sync to cloud (debounced)
+  if (typeof FireSync !== 'undefined' && FireSync.isActive()) {
+    FireSync.debouncedPush();
+  }
 }
 
 function getCompletedCount() {

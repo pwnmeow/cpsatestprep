@@ -8,7 +8,25 @@
 </head>
 <body>
   <div id="app">Loading...</div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    window.FIREBASE_CONFIG = {
+      apiKey: "AIzaSyBLO98pTqLolewaZNmeZ1XFl61ZM2cmxFE",
+      authDomain: "cpsaprep.firebaseapp.com",
+      projectId: "cpsaprep",
+      storageBucket: "cpsaprep.firebasestorage.app",
+      messagingSenderId: "307561898646",
+      appId: "1:307561898646:web:23ad6af9930610ec48d8b7"
+    };
+  </script>
+
   <script src="js/questions.js"></script>
+  <script src="js/sync.js"></script>
   <script src="js/app.js"></script>
+  <script>FireSync.init();</script>
 </body>
 </html>
