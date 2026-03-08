@@ -102,9 +102,16 @@ function renderMenu() {
 
     <div class="mode-buttons">
       <button onclick="startPortDrill()" class="btn btn-port">PORT DRILL (Most Tested!)</button>
-      <button onclick="showPortReference()" class="btn btn-portref">PORT REFERENCE</button>
       <button onclick="startRandomMix()" class="btn btn-mix">RANDOM MIX (All 334)</button>
       <button onclick="startWeakAreas()" class="btn btn-weak">WEAK AREAS</button>
+    </div>
+
+    <h2 class="section-title">REFERENCE TABLES</h2>
+    <p class="hint">All cheat sheets from the exam bible.</p>
+    <div class="ref-buttons">
+      <button onclick="showPortReference()" class="btn btn-ref btn-ref-ports">PORTS</button>
+      <button onclick="showCryptoReference()" class="btn btn-ref btn-ref-crypto">CRYPTO</button>
+      <button onclick="showIISReference()" class="btn btn-ref btn-ref-iis">IIS MAPPING</button>
     </div>
 
     <h2 class="section-title">STUDY BATCHES</h2>
@@ -644,6 +651,180 @@ function buildPortRows(ports, filter) {
 function filterPorts() {
   const val = document.getElementById('port-search').value;
   document.getElementById('port-ref-body').innerHTML = buildPortRows(window._portRefData, val);
+}
+
+function showCryptoReference() {
+  state.mode = 'cryptoref';
+  const app = document.getElementById('app');
+
+  app.innerHTML = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">CRYPTOGRAPHY REFERENCE</span>
+      <span></span>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">AES Round Counts</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>Variant</span><span>Key</span><span>Block</span><span>Rounds</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">AES-128</span><span>128-bit</span><span>128-bit</span><span class="ref-accent">10</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">AES-192</span><span>192-bit</span><span>128-bit</span><span class="ref-accent">12</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">AES-256</span><span>256-bit</span><span>128-bit</span><span class="ref-accent">14</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Hash Output Lengths</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>Algorithm</span><span>Output</span><span>Hex</span><span>Status</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">MD5</span><span>128-bit</span><span>32</span><span class="ref-danger">Broken</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">SHA-1</span><span>160-bit</span><span>40</span><span class="ref-danger">Broken</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">SHA-256</span><span>256-bit</span><span>64</span><span class="ref-safe">Secure</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">SHA-512</span><span>512-bit</span><span>128</span><span class="ref-safe">Secure</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">NTLM</span><span>128-bit</span><span>32</span><span class="ref-warn">Weak (unsalted MD4)</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">LM</span><span>128-bit</span><span>32</span><span class="ref-danger">Very weak (7+7, DES)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Block Cipher Modes</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Mode</span><span>Name</span><span>Key Point</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">ECB</span><span>Electronic Codebook</span><span class="ref-danger">INSECURE - identical blocks = identical ciphertext. NEVER use.</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">CBC</span><span>Cipher Block Chaining</span><span>XOR with previous block. Needs IV. Most common mode.</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">CFB</span><span>Cipher Feedback</span><span>Stream cipher mode. Previous ciphertext fed back.</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">OFB</span><span>Output Feedback</span><span>Stream cipher. No error propagation.</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">CTR</span><span>Counter</span><span>Encrypts incrementing counter. Parallelizable. Fast.</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-safe">
+          <span class="ref-highlight">GCM</span><span>Galois/Counter Mode</span><span class="ref-safe">AEAD: confidentiality + integrity. Used in TLS 1.3.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Wireless Encryption</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>Standard</span><span>Encryption</span><span>Cipher</span><span>Status</span>
+        </div>
+        <div class="ref-table-row ref-cols-4 ref-row-danger">
+          <span class="ref-highlight">WEP</span><span>RC4</span><span>RC4 stream</span><span class="ref-danger">BROKEN - crack in minutes</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">WPA</span><span>TKIP</span><span>RC4-based</span><span class="ref-warn">Deprecated</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">WPA2</span><span>CCMP</span><span>AES</span><span class="ref-safe">Current minimum</span>
+        </div>
+        <div class="ref-table-row ref-cols-4 ref-row-safe">
+          <span class="ref-highlight">WPA3</span><span>SAE/GCM</span><span>AES-256</span><span class="ref-safe">Latest - forward secrecy</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function showIISReference() {
+  state.mode = 'iisref';
+  const app = document.getElementById('app');
+
+  app.innerHTML = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">IIS &rarr; WINDOWS MAPPING</span>
+      <span></span>
+    </div>
+    <p class="port-ref-subtitle">IIS version reveals the underlying Windows OS. This is heavily tested.</p>
+
+    <div class="ref-section">
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-2">
+          <span>IIS Version</span><span>Windows OS</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 5.0</span><span>Windows 2000</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 5.1</span><span>Windows XP Pro</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 6.0</span><span>Server 2003</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 7.0</span><span>Server 2008 / Vista</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 7.5</span><span>Server 2008 R2 / Win 7</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 8.0</span><span>Server 2012 / Win 8</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 8.5</span><span>Server 2012 R2 / Win 8.1</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-highlight">IIS 10.0</span><span>Server 2016/2019/2022 / Win 10/11</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">EXAM INFO</h3>
+      <div class="ref-table">
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Format</span><span>120 MCQs</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Duration</span><span>2 Hours</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Pass Mark</span><span class="ref-accent">60% (72/120)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Negative Marking</span><span class="ref-safe">None</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Book</span><span>Closed Book</span>
+        </div>
+        <div class="ref-table-row ref-cols-2 ref-row-safe">
+          <span class="ref-muted">Strategy</span><span class="ref-safe">ANSWER EVERY QUESTION - NO PENALTY</span>
+        </div>
+      </div>
+    </div>`;
 }
 
 function goMenu() {

@@ -257,11 +257,81 @@ body {
 .port-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .port-option { text-align: center; font-size: 1.2em; font-weight: 700; padding: 18px; }
 
-/* PORT REFERENCE BUTTON */
-.btn-portref {
+/* REFERENCE BUTTONS */
+.ref-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 25px;
+}
+.btn-ref {
+  padding: 14px 8px;
+  font-size: 0.85em;
+  text-align: center;
+}
+.btn-ref-ports {
   background: linear-gradient(135deg, #f7c948, #ff6b35);
   color: #000;
 }
+.btn-ref-crypto {
+  background: linear-gradient(135deg, #a78bfa, #7b2ff7);
+  color: #fff;
+}
+.btn-ref-iis {
+  background: linear-gradient(135deg, #00d2ff, #0066ff);
+  color: #fff;
+}
+
+/* GENERIC REFERENCE TABLES */
+.ref-section {
+  margin-bottom: 24px;
+}
+.ref-section-title {
+  color: #7b2ff7;
+  font-size: 0.95em;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.ref-table {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+}
+.ref-table-header {
+  display: grid;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #1a1f2e;
+  font-weight: 700;
+  font-size: 0.75em;
+  color: #7b2ff7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #2a3444;
+}
+.ref-table-row {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 14px;
+  background: #111827;
+  border-bottom: 1px solid #1a1f2e;
+  font-size: 0.88em;
+  color: #ccc;
+}
+.ref-table-row:last-child { border-bottom: none; }
+.ref-cols-2 { grid-template-columns: 1fr 1fr; }
+.ref-cols-3 { grid-template-columns: 80px 1fr 1fr; }
+.ref-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.ref-highlight { color: #00d2ff; font-weight: 700; }
+.ref-accent { color: #f7c948; font-weight: 700; }
+.ref-danger { color: #ff4757; font-weight: 600; }
+.ref-warn { color: #f7c948; font-weight: 600; }
+.ref-safe { color: #2ed573; font-weight: 600; }
+.ref-muted { color: #888; font-weight: 600; }
+.ref-row-danger { background: #1a0d0f; border-left: 3px solid #ff4757; }
+.ref-row-safe { background: #0d1a12; border-left: 3px solid #2ed573; }
 
 /* PORT REFERENCE PAGE */
 .port-ref-subtitle {
@@ -524,6 +594,18 @@ button { -webkit-tap-highlight-color: transparent; }
   /* Section titles */
   .section-title { font-size: 1em; margin: 20px 0 6px; }
   .hint { font-size: 0.8em; }
+
+  /* Reference buttons */
+  .ref-buttons { gap: 6px; margin-bottom: 18px; }
+  .btn-ref { padding: 12px 6px; font-size: 0.78em; }
+
+  /* Reference tables */
+  .ref-section { margin-bottom: 18px; }
+  .ref-section-title { font-size: 0.85em; }
+  .ref-table-header { font-size: 0.68em; padding: 8px 10px; }
+  .ref-table-row { font-size: 0.8em; padding: 8px 10px; }
+  .ref-cols-3 { grid-template-columns: 60px 1fr 1fr; }
+  .ref-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 
   /* Batch cards */
   .batch-card { padding: 12px 14px; gap: 10px; }
