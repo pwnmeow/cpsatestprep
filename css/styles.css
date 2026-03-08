@@ -6,6 +6,8 @@ body {
   color: #e0e0e0;
   min-height: 100vh;
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 #app {
@@ -386,14 +388,126 @@ body {
   opacity: 1;
 }
 
+/* GLOBAL MOBILE FIXES */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: hidden; }
+button { -webkit-tap-highlight-color: transparent; }
+
+/* TABLET */
+@media (max-width: 768px) {
+  #app { padding: 16px; }
+  .header h1 { font-size: 1.8em; }
+  .batch-label { font-size: 0.88em; }
+}
+
 /* MOBILE */
 @media (max-width: 600px) {
-  #app { padding: 12px; }
-  .header h1 { font-size: 1.6em; }
-  .quiz-card { padding: 16px; }
-  .q-text { font-size: 1em; }
-  .option { padding: 12px 14px; font-size: 0.9em; }
-  .port-options { grid-template-columns: 1fr 1fr; }
-  .port-option { padding: 14px; font-size: 1em; }
-  .stats-row { flex-wrap: wrap; gap: 10px; }
+  #app {
+    padding: 12px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Header */
+  .header { padding: 16px 0 12px; }
+  .header h1 { font-size: 1.5em; letter-spacing: 2px; }
+  .subtitle { font-size: 0.85em; margin: 6px 0 14px; }
+  .progress-bar-container { height: 10px; margin: 8px 0; }
+  .progress-text { font-size: 0.82em; }
+  .stats-row { flex-wrap: wrap; gap: 8px 14px; font-size: 0.8em; }
+
+  /* Mode buttons - bigger touch targets */
+  .mode-buttons { margin: 18px 0; gap: 8px; }
+  .btn-port { font-size: 1.05em; padding: 14px; }
+  .btn-mix, .btn-weak { padding: 14px; }
+
+  /* Section titles */
+  .section-title { font-size: 1em; margin: 20px 0 6px; }
+  .hint { font-size: 0.8em; }
+
+  /* Batch cards */
+  .batch-card { padding: 12px 14px; gap: 10px; }
+  .batch-icon { font-size: 1.1em; width: 28px; }
+  .batch-label { font-size: 0.84em; word-break: break-word; }
+  .batch-range { font-size: 0.75em; }
+
+  /* Quiz header - handle long titles */
+  .quiz-header { gap: 6px; flex-wrap: wrap; }
+  .btn-back { padding: 6px 10px; font-size: 0.8em; }
+  .quiz-title { font-size: 0.82em; flex: 1; text-align: center; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .quiz-score { font-size: 0.82em; white-space: nowrap; }
+
+  /* Quiz card */
+  .quiz-card { padding: 16px; border-radius: 12px; }
+  .q-meta { gap: 6px; margin-bottom: 12px; }
+  .q-domain, .q-topic { font-size: 0.7em; padding: 2px 8px; }
+  .q-num { font-size: 0.75em; }
+  .q-text { font-size: 0.95em; margin-bottom: 16px; line-height: 1.5; word-break: break-word; }
+
+  /* Options - bigger touch targets for thumbs */
+  .options { gap: 8px; }
+  .option {
+    padding: 14px 14px;
+    font-size: 0.88em;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    word-break: break-word;
+  }
+
+  /* Feedback */
+  .feedback { padding: 12px 14px; font-size: 0.85em; word-break: break-word; }
+
+  /* Next button */
+  .btn-next, .btn-retry, .btn-next-batch {
+    padding: 16px;
+    font-size: 1em;
+    min-height: 52px;
+    border-radius: 10px;
+  }
+  .btn-menu { padding: 14px; min-height: 48px; }
+
+  /* Port drill */
+  .port-stats { font-size: 0.8em; margin-bottom: 12px; }
+  .port-card .q-text { font-size: 1.15em; }
+  .port-options { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .port-option { padding: 16px 10px; font-size: 1em; min-height: 52px; word-break: break-word; }
+
+  /* Results */
+  .results-card { padding: 24px 16px; margin-top: 20px; border-radius: 12px; }
+  .results-score h1 { font-size: 2.4em; }
+  .results-score p { font-size: 1em; }
+  .wrong-item { padding: 10px 12px; }
+  .wrong-q { font-size: 0.85em; }
+  .wrong-a { font-size: 0.8em; }
+
+  /* Footer */
+  .btn-reset { margin-top: 30px; }
+
+  /* Sync bar */
+  #sync-bar { padding: 6px 12px; }
+  .sync-row { gap: 6px; }
+  .sync-user { font-size: 0.82em; }
+  #sync-input { width: 140px; font-size: 0.85em; padding: 8px 10px; }
+  .sync-btn { padding: 8px 12px; font-size: 0.78em; }
+  .sync-hint { font-size: 0.7em; }
+
+  /* Toast */
+  .sync-toast { font-size: 0.82em; padding: 8px 16px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* VERY SMALL PHONES (iPhone SE, etc) */
+@media (max-width: 375px) {
+  #app { padding: 8px; }
+  .header h1 { font-size: 1.3em; }
+  .subtitle { font-size: 0.8em; }
+  .stats-row { gap: 6px 10px; font-size: 0.75em; }
+  .btn-port { font-size: 0.95em; padding: 12px; }
+  .batch-label { font-size: 0.8em; }
+  .q-text { font-size: 0.9em; }
+  .option { font-size: 0.84em; padding: 12px; }
+  .port-option { font-size: 0.9em; padding: 14px 8px; }
+  .quiz-title { font-size: 0.75em; }
+  #sync-input { width: 120px; }
+  .results-score h1 { font-size: 2em; }
 }
