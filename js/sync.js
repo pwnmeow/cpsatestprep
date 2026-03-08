@@ -71,8 +71,8 @@ const FireSync = (() => {
       await db.collection('users').doc(username).set(data);
       showToast('Synced!');
     } catch (e) {
-      console.error('Sync push failed:', e);
-      showToast('Sync failed!');
+      console.error('Sync push failed:', e.code, e.message);
+      showToast('Sync failed: ' + (e.code || e.message));
     }
   }
 
@@ -94,8 +94,8 @@ const FireSync = (() => {
         renderMenu();
       }
     } catch (e) {
-      console.error('Sync pull failed:', e);
-      showToast('Load failed!');
+      console.error('Sync pull failed:', e.code, e.message);
+      showToast('Load failed: ' + (e.code || e.message));
     }
   }
 
