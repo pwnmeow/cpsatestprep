@@ -291,6 +291,9 @@ body {
 .wrong-a { color: #2ed573; font-size: 0.85em; font-weight: 600; }
 
 .footer { text-align: center; }
+.footer-credit { margin-top: 16px; font-size: 0.8em; }
+.footer-credit a { color: #7b2ff7; text-decoration: none; }
+.footer-credit a:hover { text-decoration: underline; }
 
 /* SYNC BAR */
 #sync-bar {

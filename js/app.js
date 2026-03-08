@@ -86,8 +86,8 @@ function renderMenu() {
 
   let html = `
     <div class="header">
-      <h1>CPSA EXAM PREP</h1>
-      <p class="subtitle">334 Questions | ${BATCHES.length} Batches | 5-Day Blitz</p>
+      <h1>CPSA PREP</h1>
+      <p class="subtitle">334 Questions | ${BATCHES.length} Batches</p>
       <div class="progress-bar-container">
         <div class="progress-bar" style="width:${pct}%"></div>
       </div>
@@ -130,6 +130,7 @@ function renderMenu() {
   html += `</div>
     <div class="footer">
       <button onclick="resetProgress()" class="btn btn-reset">Reset All Progress</button>
+      <p class="footer-credit"><a href="https://sheerazali.com" target="_blank">sheerazali.com</a></p>
     </div>`;
 
   app.innerHTML = html;
