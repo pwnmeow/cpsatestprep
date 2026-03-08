@@ -330,6 +330,8 @@ body {
 .ref-warn { color: #f7c948; font-weight: 600; }
 .ref-safe { color: #2ed573; font-weight: 600; }
 .ref-muted { color: #888; font-weight: 600; }
+.ref-cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+.ref-note { color: #888; font-size: 0.78em; margin-top: 8px; line-height: 1.4; padding-left: 4px; }
 .ref-row-danger { background: #1a0d0f; border-left: 3px solid #ff4757; }
 .ref-row-safe { background: #0d1a12; border-left: 3px solid #2ed573; }
 
@@ -606,6 +608,7 @@ button { -webkit-tap-highlight-color: transparent; }
   .ref-table-row { font-size: 0.8em; padding: 8px 10px; }
   .ref-cols-3 { grid-template-columns: 60px 1fr 1fr; }
   .ref-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .ref-cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
 
   /* Batch cards */
   .batch-card { padding: 12px 14px; gap: 10px; }

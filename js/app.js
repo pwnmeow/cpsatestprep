@@ -739,22 +739,23 @@ function showCryptoReference() {
     <div class="ref-section">
       <h3 class="ref-section-title">Wireless Encryption</h3>
       <div class="ref-table">
-        <div class="ref-table-header ref-cols-4">
-          <span>Standard</span><span>Encryption</span><span>Cipher</span><span>Status</span>
+        <div class="ref-table-header ref-cols-5">
+          <span>Standard</span><span>Encryption</span><span>Cipher</span><span>Key</span><span>Status</span>
         </div>
-        <div class="ref-table-row ref-cols-4 ref-row-danger">
-          <span class="ref-highlight">WEP</span><span>RC4</span><span>RC4 stream</span><span class="ref-danger">BROKEN - crack in minutes</span>
+        <div class="ref-table-row ref-cols-5 ref-row-danger">
+          <span class="ref-highlight">WEP</span><span>RC4</span><span>RC4 stream</span><span class="ref-accent">40/104-bit + 24-bit IV</span><span class="ref-danger">BROKEN</span>
         </div>
-        <div class="ref-table-row ref-cols-4">
-          <span class="ref-highlight">WPA</span><span>TKIP</span><span>RC4-based</span><span class="ref-warn">Deprecated</span>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">WPA</span><span>TKIP</span><span>RC4-based</span><span class="ref-accent">128-bit + 48-bit IV</span><span class="ref-warn">Deprecated</span>
         </div>
-        <div class="ref-table-row ref-cols-4">
-          <span class="ref-highlight">WPA2</span><span>CCMP</span><span>AES</span><span class="ref-safe">Current minimum</span>
+        <div class="ref-table-row ref-cols-5">
+          <span class="ref-highlight">WPA2</span><span>CCMP</span><span>AES-128</span><span class="ref-accent">128-bit</span><span class="ref-safe">Current min</span>
         </div>
-        <div class="ref-table-row ref-cols-4 ref-row-safe">
-          <span class="ref-highlight">WPA3</span><span>SAE/GCM</span><span>AES-256</span><span class="ref-safe">Latest - forward secrecy</span>
+        <div class="ref-table-row ref-cols-5 ref-row-safe">
+          <span class="ref-highlight">WPA3</span><span>SAE/GCM</span><span>AES-256</span><span class="ref-accent">192/256-bit</span><span class="ref-safe">Latest</span>
         </div>
       </div>
+      <p class="ref-note">WPA3: SAE replaces PSK handshake = forward secrecy. Enterprise mode uses 192-bit.</p>
     </div>`;
 }
 
