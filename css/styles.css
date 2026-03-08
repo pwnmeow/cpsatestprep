@@ -339,6 +339,52 @@ body {
 .ref-muted { color: #888; font-weight: 600; }
 .ref-cols-5 { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
 .ref-note { color: #888; font-size: 0.78em; margin-top: 8px; line-height: 1.4; padding-left: 4px; }
+/* Jump nav */
+.ref-jump-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 50px;
+  z-index: 50;
+  background: #0a0e17;
+  padding: 10px 0;
+  flex-wrap: wrap;
+}
+.ref-jump-nav a {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  background: #1a1f2e;
+  color: #00d2ff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.82em;
+  font-weight: 700;
+  border: 1px solid #2a3444;
+  min-width: 60px;
+}
+.ref-jump-nav a:hover { background: #1a2840; border-color: #00d2ff; }
+
+/* Page title dividers */
+.ref-page-title {
+  font-size: 1.2em;
+  color: #7b2ff7;
+  letter-spacing: 2px;
+  margin: 30px 0 12px;
+  padding-top: 10px;
+  border-top: 2px solid #1f2937;
+}
+.ref-page-title:first-of-type { margin-top: 0; border-top: none; }
+
+/* Button for combined cheat sheet */
+.btn-ref-all {
+  background: linear-gradient(135deg, #f7c948, #7b2ff7);
+  color: #fff;
+  font-size: 1em;
+  padding: 14px;
+}
+
 .ref-row-danger { background: #1a0d0f; border-left: 3px solid #ff4757; }
 .ref-row-safe { background: #0d1a12; border-left: 3px solid #2ed573; }
 
@@ -604,10 +650,11 @@ button { -webkit-tap-highlight-color: transparent; }
   .section-title { font-size: 1em; margin: 20px 0 6px; }
   .hint { font-size: 0.8em; }
 
-  /* Reference buttons */
-  .ref-buttons { gap: 6px; margin-bottom: 18px; }
-  .ref-buttons-4 { grid-template-columns: 1fr 1fr; }
-  .btn-ref { padding: 12px 6px; font-size: 0.78em; }
+  /* Reference */
+  .ref-jump-nav { gap: 6px; top: 42px; padding: 8px 0; }
+  .ref-jump-nav a { padding: 8px 8px; font-size: 0.75em; }
+  .ref-page-title { font-size: 1em; margin: 24px 0 10px; }
+  .btn-ref-all { font-size: 0.9em; padding: 12px; }
 
   /* Reference tables */
   .ref-section { margin-bottom: 18px; }

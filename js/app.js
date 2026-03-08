@@ -106,13 +106,8 @@ function renderMenu() {
       <button onclick="startWeakAreas()" class="btn btn-weak">WEAK AREAS</button>
     </div>
 
-    <h2 class="section-title">REFERENCE TABLES</h2>
-    <p class="hint">All cheat sheets from the exam bible.</p>
-    <div class="ref-buttons ref-buttons-4">
-      <button onclick="showPortReference()" class="btn btn-ref btn-ref-ports">PORTS</button>
-      <button onclick="showCryptoReference()" class="btn btn-ref btn-ref-crypto">CRYPTO</button>
-      <button onclick="showNetworkReference()" class="btn btn-ref btn-ref-net">NETWORKING</button>
-      <button onclick="showIISReference()" class="btn btn-ref btn-ref-iis">IIS / EXAM</button>
+    <div class="mode-buttons" style="margin-top:10px">
+      <button onclick="showAllReferences()" class="btn btn-ref-all">CHEAT SHEETS (Ports, Crypto, Networking, IIS)</button>
     </div>
 
     <h2 class="section-title">STUDY BATCHES</h2>
@@ -521,11 +516,8 @@ function selectPortOption(idx) {
   renderPortDrill();
 }
 
-function showPortReference() {
-  state.mode = 'portref';
-  // Exact match to PDF "MASTER PORT REFERENCE TABLE"
-  // gotcha = true for orange-highlighted "frequently missed" ports
-  const ports = [
+function getPortsData() {
+  return [
     {port:"7",service:"Echo",proto:"TCP/UDP",notes:"Echoes data sent to it",gotcha:false},
     {port:"20",service:"FTP Data",proto:"TCP",notes:"FTP data transfer",gotcha:false},
     {port:"21",service:"FTP Control",proto:"TCP",notes:"FTP command channel",gotcha:false},
@@ -595,38 +587,32 @@ function showPortReference() {
     {port:"9200",service:"Elasticsearch",proto:"TCP",notes:"Search engine",gotcha:true},
     {port:"27017",service:"MongoDB",proto:"TCP",notes:"NoSQL DB",gotcha:true},
   ];
+  return ports;
+}
 
-  const app = document.getElementById('app');
+function getPortsHTML(ports) {
   let html = `
-    <div class="quiz-header">
-      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
-      <span class="quiz-title">MASTER PORT REFERENCE</span>
-      <span class="quiz-score">${ports.length} ports</span>
-    </div>
-    <p class="port-ref-subtitle">Port numbers are THE most tested topic. <span class="gotcha-label">Orange</span> = gotcha ports that trip up candidates.</p>
-    <div class="port-ref-search">
-      <input type="text" id="port-search" placeholder="Search port, service, or notes..." oninput="filterPorts()">
-    </div>
-    <div class="port-ref-table">
-      <div class="port-ref-header">
-        <span>Port</span>
-        <span>Service</span>
-        <span>Proto</span>
-        <span>Notes</span>
+    <div class="ref-section" id="ref-ports">
+      <h2 class="ref-page-title">MASTER PORT REFERENCE</h2>
+      <p class="port-ref-subtitle">Port numbers are THE most tested topic. <span class="gotcha-label">Orange</span> = gotcha ports that trip up candidates.</p>
+      <div class="port-ref-search">
+        <input type="text" id="port-search" placeholder="Search port, service, or notes..." oninput="filterPorts()">
       </div>
-      <div id="port-ref-body">`;
-
+      <div class="port-ref-table">
+        <div class="port-ref-header">
+          <span>Port</span>
+          <span>Service</span>
+          <span>Proto</span>
+          <span>Notes</span>
+        </div>
+        <div id="port-ref-body">`;
   html += buildPortRows(ports, '');
-
-  html += `</div></div>`;
-  app.innerHTML = html;
-
-  window._portRefData = ports;
+  html += `</div></div></div>`;
+  return html;
 }
 
 function buildPortRows(ports, filter) {
   const f = filter.toLowerCase();
-  let html = '';
   let filtered = ports;
   if (f) {
     filtered = ports.filter(p =>
@@ -634,6 +620,7 @@ function buildPortRows(ports, filter) {
       p.proto.toLowerCase().includes(f) || p.notes.toLowerCase().includes(f)
     );
   }
+  let html = '';
   filtered.forEach(p => {
     html += `
       <div class="port-ref-row${p.gotcha ? ' gotcha' : ''}">
@@ -654,16 +641,10 @@ function filterPorts() {
   document.getElementById('port-ref-body').innerHTML = buildPortRows(window._portRefData, val);
 }
 
-function showCryptoReference() {
-  state.mode = 'cryptoref';
-  const app = document.getElementById('app');
-
-  app.innerHTML = `
-    <div class="quiz-header">
-      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
-      <span class="quiz-title">CRYPTOGRAPHY REFERENCE</span>
-      <span></span>
-    </div>
+function getCryptoHTML() {
+  return `
+    <div id="ref-crypto">
+      <h2 class="ref-page-title">CRYPTOGRAPHY</h2>
 
     <div class="ref-section">
       <h3 class="ref-section-title">AES Round Counts</h3>
@@ -757,20 +738,15 @@ function showCryptoReference() {
         </div>
       </div>
       <p class="ref-note">WPA3: SAE replaces PSK handshake = forward secrecy. Enterprise mode uses 192-bit.</p>
+    </div>
     </div>`;
 }
 
-function showIISReference() {
-  state.mode = 'iisref';
-  const app = document.getElementById('app');
-
-  app.innerHTML = `
-    <div class="quiz-header">
-      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
-      <span class="quiz-title">IIS &rarr; WINDOWS MAPPING</span>
-      <span></span>
-    </div>
-    <p class="port-ref-subtitle">IIS version reveals the underlying Windows OS. This is heavily tested.</p>
+function getIISHTML() {
+  return `
+    <div id="ref-iis">
+      <h2 class="ref-page-title">IIS &rarr; WINDOWS MAPPING</h2>
+      <p class="port-ref-subtitle">IIS version reveals the underlying Windows OS. This is heavily tested.</p>
 
     <div class="ref-section">
       <div class="ref-table">
@@ -826,19 +802,14 @@ function showIISReference() {
           <span class="ref-muted">Strategy</span><span class="ref-safe">ANSWER EVERY QUESTION - NO PENALTY</span>
         </div>
       </div>
+    </div>
     </div>`;
 }
 
-function showNetworkReference() {
-  state.mode = 'netref';
-  const app = document.getElementById('app');
-
-  app.innerHTML = `
-    <div class="quiz-header">
-      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
-      <span class="quiz-title">NETWORKING REFERENCE</span>
-      <span></span>
-    </div>
+function getNetworkHTML() {
+  return `
+    <div id="ref-net">
+      <h2 class="ref-page-title">NETWORKING</h2>
 
     <div class="ref-section">
       <h3 class="ref-section-title">IP Address Classes</h3>
@@ -1066,8 +1037,47 @@ function showNetworkReference() {
         </div>
       </div>
       <p class="ref-note">Remember: Please Do Not Throw Sausage Pizza Away (layers 1-7). TCP/IP has 4 layers: Network Access, Internet, Transport, Application.</p>
+    </div>
     </div>`;
 }
+
+function showAllReferences() {
+  state.mode = 'allref';
+  const ports = getPortsData();
+  const app = document.getElementById('app');
+
+  let html = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">CHEAT SHEETS</span>
+      <span></span>
+    </div>
+    <div class="ref-jump-nav">
+      <a href="#ref-ports" onclick="smoothJump('ref-ports')">Ports</a>
+      <a href="#ref-crypto" onclick="smoothJump('ref-crypto')">Crypto</a>
+      <a href="#ref-net" onclick="smoothJump('ref-net')">Networking</a>
+      <a href="#ref-iis" onclick="smoothJump('ref-iis')">IIS / Exam</a>
+    </div>`;
+
+  html += getPortsHTML(ports);
+  html += getCryptoHTML();
+  html += getNetworkHTML();
+  html += getIISHTML();
+
+  app.innerHTML = html;
+  window._portRefData = ports;
+}
+
+function smoothJump(id) {
+  event.preventDefault();
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Keep old functions working as standalone (they call showAllReferences now)
+function showPortReference() { showAllReferences(); setTimeout(() => smoothJump('ref-ports'), 50); }
+function showCryptoReference() { showAllReferences(); setTimeout(() => smoothJump('ref-crypto'), 50); }
+function showNetworkReference() { showAllReferences(); setTimeout(() => smoothJump('ref-net'), 50); }
+function showIISReference() { showAllReferences(); setTimeout(() => smoothJump('ref-iis'), 50); }
 
 function goMenu() {
   state.mode = 'menu';
