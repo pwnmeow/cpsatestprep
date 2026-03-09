@@ -101,7 +101,8 @@ function renderMenu() {
     </div>
 
     <div class="mode-buttons">
-      <button onclick="startPortDrill()" class="btn btn-port">PORT DRILL (Most Tested!)</button>
+      <button onclick="showPortMastery()" class="btn btn-port">PORT MASTERY (Learn &amp; Type)</button>
+      <button onclick="startPortDrill()" class="btn btn-portdrill-btn">PORT SPEED DRILL (MCQ)</button>
       <button onclick="startRandomMix()" class="btn btn-mix">RANDOM MIX (All 334)</button>
       <button onclick="startWeakAreas()" class="btn btn-weak">WEAK AREAS</button>
     </div>
@@ -1078,6 +1079,260 @@ function showPortReference() { showAllReferences(); setTimeout(() => smoothJump(
 function showCryptoReference() { showAllReferences(); setTimeout(() => smoothJump('ref-crypto'), 50); }
 function showNetworkReference() { showAllReferences(); setTimeout(() => smoothJump('ref-net'), 50); }
 function showIISReference() { showAllReferences(); setTimeout(() => smoothJump('ref-iis'), 50); }
+
+// === PORT MASTERY ===
+const PORT_BATCH_SIZE = 8;
+
+function getPortBatches() {
+  const ports = getPortsData();
+  const batches = [];
+  for (let i = 0; i < ports.length; i += PORT_BATCH_SIZE) {
+    batches.push(ports.slice(i, i + PORT_BATCH_SIZE));
+  }
+  return batches;
+}
+
+function isPortBatchDone(idx) {
+  return state.progress[`portbatch_${idx}`] === true;
+}
+
+function isPortBatchUnlocked(idx) {
+  if (idx === 0) return true;
+  return isPortBatchDone(idx - 1);
+}
+
+function showPortMastery() {
+  state.mode = 'portmastery';
+  const batches = getPortBatches();
+  const app = document.getElementById('app');
+  const done = batches.filter((_, i) => isPortBatchDone(i)).length;
+  const pct = Math.round((done / batches.length) * 100);
+
+  let html = `
+    <div class="quiz-header">
+      <button onclick="goMenu()" class="btn btn-back">&larr; Menu</button>
+      <span class="quiz-title">PORT MASTERY</span>
+      <span class="quiz-score">${done}/${batches.length}</span>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" style="width:${pct}%"></div>
+    </div>
+    <p class="hint">Learn 8 ports at a time. Study them, then type each port number from memory. Get all 8 right to unlock the next batch.</p>
+    <div class="batch-grid">`;
+
+  batches.forEach((b, i) => {
+    const unlocked = isPortBatchUnlocked(i);
+    const completed = isPortBatchDone(i);
+    const cls = completed ? 'batch-card completed' : (unlocked ? 'batch-card unlocked' : 'batch-card locked');
+    const icon = completed ? '&#10003;' : (unlocked ? '&#9654;' : '&#128274;');
+    const range = `${b[0].service} - ${b[b.length-1].service}`;
+    const portRange = `Ports: ${b.map(p=>p.port).join(', ')}`;
+    html += `
+      <div class="${cls}" ${unlocked ? `onclick="startPortLearn(${i})"` : ''}>
+        <div class="batch-icon">${icon}</div>
+        <div class="batch-info">
+          <div class="batch-label">Batch ${i+1}: ${range}</div>
+          <div class="batch-range">${portRange}</div>
+        </div>
+      </div>`;
+  });
+
+  html += `</div>`;
+  app.innerHTML = html;
+}
+
+function startPortLearn(batchIdx) {
+  const batches = getPortBatches();
+  const batch = batches[batchIdx];
+  state.mode = 'portlearn';
+  state.portMasteryBatch = batchIdx;
+  state.portMasteryPorts = batch;
+  state.portLearnIdx = 0;
+  renderPortLearn();
+}
+
+function renderPortLearn() {
+  const ports = state.portMasteryPorts;
+  const idx = state.portLearnIdx;
+  const app = document.getElementById('app');
+
+  let html = `
+    <div class="quiz-header">
+      <button onclick="showPortMastery()" class="btn btn-back">&larr; Back</button>
+      <span class="quiz-title">LEARN - Batch ${state.portMasteryBatch + 1}</span>
+      <span class="quiz-score">${idx + 1}/${ports.length}</span>
+    </div>
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar" style="width:${((idx + 1) / ports.length) * 100}%"></div>
+    </div>
+    <p class="hint" style="text-align:center;margin-bottom:16px">Tap the card to flip. Memorize the port number!</p>`;
+
+  const p = ports[idx];
+  html += `
+    <div class="flash-card" onclick="document.querySelector('.flash-card').classList.toggle('flipped')">
+      <div class="flash-inner">
+        <div class="flash-front">
+          <div class="flash-service">${p.service}</div>
+          <div class="flash-proto">${p.proto}</div>
+          <div class="flash-notes">${p.notes}</div>
+          <div class="flash-tap">tap to reveal port</div>
+        </div>
+        <div class="flash-back">
+          <div class="flash-port">${p.port}</div>
+          <div class="flash-service-sm">${p.service}</div>
+          <div class="flash-proto">${p.proto}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="port-learn-nav">
+      ${idx > 0 ? `<button onclick="state.portLearnIdx--;renderPortLearn()" class="btn btn-back">&larr; Prev</button>` : '<span></span>'}
+      ${idx < ports.length - 1 ?
+        `<button onclick="state.portLearnIdx++;renderPortLearn()" class="btn btn-next" style="width:auto;padding:12px 24px">Next &rarr;</button>` :
+        `<button onclick="startPortRecall(state.portMasteryBatch)" class="btn btn-next" style="width:auto;padding:12px 24px">Test Yourself &rarr;</button>`
+      }
+    </div>`;
+
+  app.innerHTML = html;
+}
+
+function startPortRecall(batchIdx) {
+  const batches = getPortBatches();
+  state.mode = 'portrecall';
+  state.portMasteryBatch = batchIdx;
+  state.portMasteryPorts = shuffle(batches[batchIdx]);
+  state.portRecallIdx = 0;
+  state.portRecallScore = 0;
+  state.portRecallWrong = [];
+  state.portRecallAnswered = false;
+  renderPortRecall();
+}
+
+function renderPortRecall() {
+  const ports = state.portMasteryPorts;
+  const idx = state.portRecallIdx;
+  const app = document.getElementById('app');
+
+  if (idx >= ports.length) {
+    renderPortRecallResults();
+    return;
+  }
+
+  const p = ports[idx];
+  html = `
+    <div class="quiz-header">
+      <button onclick="showPortMastery()" class="btn btn-back">&larr; Back</button>
+      <span class="quiz-title">RECALL - Batch ${state.portMasteryBatch + 1}</span>
+      <span class="quiz-score">${state.portRecallScore}/${idx}</span>
+    </div>
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar" style="width:${(idx / ports.length) * 100}%"></div>
+    </div>
+
+    <div class="quiz-card">
+      <div class="recall-q">What port is <strong>${p.service}</strong>?</div>
+      <div class="recall-hint">${p.proto} | ${p.notes}</div>`;
+
+  if (!state.portRecallAnswered) {
+    html += `
+      <div class="recall-input-row">
+        <input type="number" id="port-answer" class="recall-input" placeholder="Type port number..." autofocus
+          inputmode="numeric" pattern="[0-9]*"
+          onkeydown="if(event.key==='Enter')checkPortAnswer()">
+        <button onclick="checkPortAnswer()" class="btn btn-next" style="width:auto;padding:12px 20px;margin-top:0">Check</button>
+      </div>`;
+  } else {
+    const correct = state.portRecallLastCorrect;
+    html += `
+      <div class="recall-result ${correct ? 'recall-correct' : 'recall-wrong'}">
+        <div class="recall-result-icon">${correct ? 'CORRECT!' : 'WRONG'}</div>
+        <div class="recall-result-answer">Port <strong>${p.port}</strong></div>
+        ${!correct ? `<div class="recall-result-yours">You typed: ${state.portRecallLastAnswer}</div>` : ''}
+      </div>
+      <button onclick="nextPortRecall()" class="btn btn-next">Next &rarr;</button>`;
+  }
+
+  html += `</div>`;
+  app.innerHTML = html;
+
+  if (!state.portRecallAnswered) {
+    setTimeout(() => {
+      const input = document.getElementById('port-answer');
+      if (input) input.focus();
+    }, 100);
+  }
+}
+
+function checkPortAnswer() {
+  const input = document.getElementById('port-answer');
+  if (!input) return;
+  const answer = input.value.trim();
+  if (!answer) return;
+
+  const p = state.portMasteryPorts[state.portRecallIdx];
+  const correct = answer === p.port;
+  state.portRecallAnswered = true;
+  state.portRecallLastCorrect = correct;
+  state.portRecallLastAnswer = answer;
+
+  if (correct) {
+    state.portRecallScore++;
+    state.stats.correct++;
+  } else {
+    state.portRecallWrong.push(p);
+    state.stats.wrong++;
+  }
+  saveProgress();
+  renderPortRecall();
+}
+
+function nextPortRecall() {
+  state.portRecallIdx++;
+  state.portRecallAnswered = false;
+  renderPortRecall();
+}
+
+function renderPortRecallResults() {
+  const total = state.portMasteryPorts.length;
+  const perfect = state.portRecallScore === total;
+  const app = document.getElementById('app');
+
+  if (perfect) {
+    state.progress[`portbatch_${state.portMasteryBatch}`] = true;
+    saveProgress();
+  }
+
+  let html = `
+    <div class="results-card">
+      <div class="results-score ${perfect ? 'perfect' : 'retry'}">
+        <h1>${state.portRecallScore}/${total}</h1>
+        <p>${perfect ? 'BATCH MASTERED! Ports memorized!' : 'Not quite - review and try again!'}</p>
+      </div>`;
+
+  if (state.portRecallWrong.length > 0) {
+    html += `<div class="wrong-review"><h3>Review these ports:</h3>`;
+    state.portRecallWrong.forEach(p => {
+      html += `
+        <div class="wrong-item">
+          <div class="wrong-q">${p.service} (${p.proto})</div>
+          <div class="wrong-a">Port ${p.port} - ${p.notes}</div>
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  const batchIdx = state.portMasteryBatch;
+  html += `
+      <div class="results-buttons">
+        <button onclick="startPortLearn(${batchIdx})" class="btn btn-retry">Study Again</button>
+        ${!perfect ? `<button onclick="startPortRecall(${batchIdx})" class="btn btn-next" style="margin-top:8px">Retry Test</button>` : ''}
+        ${perfect && batchIdx < getPortBatches().length - 1 ? `<button onclick="startPortLearn(${batchIdx + 1})" class="btn btn-next-batch">Next Batch &rarr;</button>` : ''}
+        <button onclick="showPortMastery()" class="btn btn-menu">Port Mastery Menu</button>
+      </div>
+    </div>`;
+
+  app.innerHTML = html;
+}
 
 function goMenu() {
   state.mode = 'menu';

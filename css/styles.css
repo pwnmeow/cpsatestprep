@@ -257,6 +257,133 @@ body {
 .port-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .port-option { text-align: center; font-size: 1.2em; font-weight: 700; padding: 18px; }
 
+/* PORT DRILL BUTTON (smaller than mastery) */
+.btn-portdrill-btn {
+  background: linear-gradient(135deg, #f7c948, #ff6b35);
+  color: #000;
+  font-size: 0.95em;
+}
+
+/* FLASHCARD */
+.flash-card {
+  perspective: 800px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  -webkit-tap-highlight-color: transparent;
+}
+.flash-inner {
+  position: relative;
+  min-height: 220px;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-inner {
+  transform: rotateY(180deg);
+}
+.flash-front, .flash-back {
+  position: absolute;
+  width: 100%;
+  min-height: 220px;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 24px;
+  text-align: center;
+}
+.flash-front {
+  background: #111827;
+  border: 2px solid #7b2ff7;
+}
+.flash-back {
+  background: #0d2818;
+  border: 2px solid #2ed573;
+  transform: rotateY(180deg);
+}
+.flash-service { font-size: 1.5em; font-weight: 800; color: #e0e0e0; margin-bottom: 8px; }
+.flash-proto { font-size: 0.85em; color: #888; margin-bottom: 6px; }
+.flash-notes { font-size: 0.9em; color: #aaa; margin-bottom: 16px; }
+.flash-tap { font-size: 0.75em; color: #555; }
+.flash-port { font-size: 3.5em; font-weight: 900; color: #2ed573; margin-bottom: 8px; }
+.flash-service-sm { font-size: 1.1em; color: #7bed9f; font-weight: 600; }
+
+.port-learn-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* RECALL MODE */
+.recall-q {
+  font-size: 1.3em;
+  text-align: center;
+  margin-bottom: 8px;
+  color: #f0f0f0;
+  line-height: 1.5;
+}
+.recall-q strong { color: #00d2ff; }
+.recall-hint {
+  text-align: center;
+  color: #666;
+  font-size: 0.85em;
+  margin-bottom: 24px;
+}
+.recall-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.recall-input {
+  flex: 1;
+  background: #1a1f2e;
+  border: 2px solid #333;
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 1.3em;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.recall-input::-webkit-outer-spin-button,
+.recall-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.recall-input:focus { border-color: #7b2ff7; }
+.recall-result {
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.recall-correct {
+  background: #0d2818;
+  border: 2px solid #2ed573;
+}
+.recall-wrong {
+  background: #2d0f12;
+  border: 2px solid #ff4757;
+}
+.recall-result-icon {
+  font-size: 1.2em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.recall-correct .recall-result-icon { color: #2ed573; }
+.recall-wrong .recall-result-icon { color: #ff4757; }
+.recall-result-answer {
+  font-size: 1.8em;
+  font-weight: 900;
+  color: #00d2ff;
+}
+.recall-result-yours {
+  color: #888;
+  font-size: 0.9em;
+  margin-top: 6px;
+}
+
 /* REFERENCE BUTTONS */
 .ref-buttons {
   display: grid;
@@ -708,6 +835,15 @@ button { -webkit-tap-highlight-color: transparent; }
     border-radius: 10px;
   }
   .btn-menu { padding: 14px; min-height: 48px; }
+
+  /* Flashcard & recall */
+  .flash-front, .flash-back { min-height: 180px; padding: 24px 16px; }
+  .flash-service { font-size: 1.2em; }
+  .flash-port { font-size: 2.8em; }
+  .recall-q { font-size: 1.1em; }
+  .recall-input { font-size: 1.1em; padding: 12px 14px; }
+  .recall-result-answer { font-size: 1.5em; }
+  .btn-portdrill-btn { font-size: 0.88em; }
 
   /* Port drill */
   .port-stats { font-size: 0.8em; margin-bottom: 12px; }
