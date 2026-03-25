@@ -1590,8 +1590,7 @@ function renderPortRecall() {
     html += `
       <div class="recall-input-row">
         <input type="number" id="port-answer" class="recall-input" placeholder="Type port number..." autofocus
-          inputmode="numeric" pattern="[0-9]*"
-          onkeydown="if(event.key==='Enter')checkPortAnswer()">
+          inputmode="numeric" pattern="[0-9]*">
         <button onclick="checkPortAnswer()" class="btn btn-next" style="width:auto;padding:12px 20px;margin-top:0">Check</button>
       </div>`;
   } else {
