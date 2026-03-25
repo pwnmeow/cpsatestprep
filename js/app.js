@@ -108,7 +108,7 @@ function renderMenu() {
     </div>
 
     <div class="mode-buttons" style="margin-top:10px">
-      <button onclick="showAllReferences()" class="btn btn-ref-all">CHEAT SHEETS (Ports, Crypto, Net, Events, IIS)</button>
+      <button onclick="showAllReferences()" class="btn btn-ref-all">CHEAT SHEETS (Ports, Crypto, Net, Linux, Events, IIS)</button>
     </div>
 
     <h2 class="section-title">STUDY BATCHES</h2>
@@ -1070,6 +1070,152 @@ function getNetworkHTML() {
     </div>`;
 }
 
+function getLinuxHTML() {
+  return `
+    <div id="ref-linux">
+      <h2 class="ref-page-title">LINUX PERMISSIONS</h2>
+      <p class="port-ref-subtitle">File permissions, SUID/SGID, sticky bit — heavily tested on the exam.</p>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Permission Bits (rwx)</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>Octal</span><span>Binary</span><span>Permission</span><span>Meaning</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">0</span><span>000</span><span>---</span><span>No access</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">1</span><span>001</span><span>--x</span><span>Execute only</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">2</span><span>010</span><span>-w-</span><span>Write only</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">3</span><span>011</span><span>-wx</span><span>Write + execute</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">4</span><span>100</span><span>r--</span><span>Read only</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">5</span><span>101</span><span>r-x</span><span>Read + execute</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">6</span><span>110</span><span>rw-</span><span>Read + write</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-accent">7</span><span>111</span><span>rwx</span><span>Full access</span>
+        </div>
+      </div>
+      <p class="ref-note">chmod 755 = rwxr-xr-x → Owner: full, Group: read+exec, Others: read+exec</p>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">SUID / SGID / Sticky Bit</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-4">
+          <span>Bit</span><span>Octal</span><span>On Files</span><span>On Directories</span>
+        </div>
+        <div class="ref-table-row ref-cols-4 ref-row-danger">
+          <span class="ref-highlight">SUID</span><span class="ref-accent">4000</span><span class="ref-danger">Runs as file OWNER (e.g. passwd runs as root)</span><span>No effect</span>
+        </div>
+        <div class="ref-table-row ref-cols-4 ref-row-danger">
+          <span class="ref-highlight">SGID</span><span class="ref-accent">2000</span><span>Runs as file GROUP</span><span class="ref-warn">New files inherit dir's group</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">Sticky</span><span class="ref-accent">1000</span><span>No effect</span><span class="ref-safe">Only owner can delete files (e.g. /tmp)</span>
+        </div>
+      </div>
+      <p class="ref-note">ls -l shows: SUID = <strong>s</strong> in owner exec (rw<strong>s</strong>), SGID = <strong>s</strong> in group exec (r-<strong>s</strong>), Sticky = <strong>t</strong> in others exec (r-<strong>t</strong>). Capital <strong>S</strong> or <strong>T</strong> = bit set but no exec underneath.</p>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Common Permission Examples</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Octal</span><span>Symbolic</span><span>Typical Use</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">644</span><span>rw-r--r--</span><span>Regular files (owner writes, others read)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">755</span><span>rwxr-xr-x</span><span>Scripts, dirs, executables</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">700</span><span>rwx------</span><span>Private dirs (SSH keys, home)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">600</span><span>rw-------</span><span>Private files (SSH keys, configs)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4755</span><span>rwsr-xr-x</span><span class="ref-danger">SUID binary (passwd, sudo, ping)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">2755</span><span>rwxr-sr-x</span><span class="ref-warn">SGID binary/dir (shared group dirs)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">1777</span><span>rwxrwxrwt</span><span class="ref-safe">Sticky dir (/tmp — everyone writes, only owner deletes)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Key Commands</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Command</span><span>Example</span><span>What It Does</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">chmod</span><span>chmod 755 file</span><span>Set permissions (octal)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">chmod</span><span>chmod u+s file</span><span>Set SUID bit</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">chmod</span><span>chmod g+s dir</span><span>Set SGID on directory</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">chmod</span><span>chmod +t dir</span><span>Set sticky bit</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">chown</span><span>chown user:group file</span><span>Change owner & group</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">umask</span><span>umask 022</span><span>Default 755 dirs / 644 files</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">find</span><span>find / -perm -4000</span><span class="ref-danger">Find ALL SUID files (pentest recon!)</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-highlight">find</span><span>find / -perm -2000</span><span class="ref-warn">Find ALL SGID files</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Exam Gotchas — SUID/SGID</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-2" style="grid-template-columns:1fr 2fr">
+          <span>Trap</span><span>Truth</span>
+        </div>
+        <div class="ref-table-row ref-cols-2 ref-row-danger" style="grid-template-columns:1fr 2fr">
+          <span class="ref-danger">SUID on a script?</span><span>Most Linux kernels IGNORE SUID on scripts — only works on binaries</span>
+        </div>
+        <div class="ref-table-row ref-cols-2 ref-row-danger" style="grid-template-columns:1fr 2fr">
+          <span class="ref-danger">SUID on a dir?</span><span>SUID on directories has NO effect on Linux</span>
+        </div>
+        <div class="ref-table-row ref-cols-2" style="grid-template-columns:1fr 2fr">
+          <span class="ref-warn">Sticky on a file?</span><span>Sticky bit on files is ignored on modern Linux — only matters on dirs</span>
+        </div>
+        <div class="ref-table-row ref-cols-2" style="grid-template-columns:1fr 2fr">
+          <span class="ref-highlight">umask 077?</span><span>Creates 700 dirs / 600 files — most restrictive common umask</span>
+        </div>
+      </div>
+    </div>
+
+    </div>`;
+}
+
 function getWindowsEventsHTML() {
   return `
     <div id="ref-events">
@@ -1259,6 +1405,7 @@ function showAllReferences() {
       <a href="#ref-ports" onclick="smoothJump('ref-ports')">Ports</a>
       <a href="#ref-crypto" onclick="smoothJump('ref-crypto')">Crypto</a>
       <a href="#ref-net" onclick="smoothJump('ref-net')">Networking</a>
+      <a href="#ref-linux" onclick="smoothJump('ref-linux')">Linux</a>
       <a href="#ref-events" onclick="smoothJump('ref-events')">Event IDs</a>
       <a href="#ref-iis" onclick="smoothJump('ref-iis')">IIS / Exam</a>
     </div>`;
@@ -1266,6 +1413,7 @@ function showAllReferences() {
   html += getPortsHTML(ports);
   html += getCryptoHTML();
   html += getNetworkHTML();
+  html += getLinuxHTML();
   html += getWindowsEventsHTML();
   html += getIISHTML();
 
@@ -1677,8 +1825,9 @@ document.addEventListener('keydown', (e) => {
     if (key === '1') smoothJump('ref-ports');
     else if (key === '2') smoothJump('ref-crypto');
     else if (key === '3') smoothJump('ref-net');
-    else if (key === '4') smoothJump('ref-events');
-    else if (key === '5') smoothJump('ref-iis');
+    else if (key === '4') smoothJump('ref-linux');
+    else if (key === '5') smoothJump('ref-events');
+    else if (key === '6') smoothJump('ref-iis');
     return;
   }
 });
