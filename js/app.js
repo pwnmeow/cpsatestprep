@@ -1558,6 +1558,40 @@ function startPortRecall(batchIdx) {
   state.portRecallScore = 0;
   state.portRecallWrong = [];
   state.portRecallAnswered = false;
+  if (!state.portRecallMode) state.portRecallMode = 'mcq';
+  // Pre-generate MCQ options for each port
+  const allPorts = getPortsData().map(p => p.port);
+  state.portRecallOptions = state.portMasteryPorts.map(p => {
+    const distractors = allPorts.filter(x => x !== p.port);
+    const picked = shuffle(distractors).slice(0, 3);
+    return shuffle([p.port, ...picked]);
+  });
+  renderPortRecall();
+}
+
+function toggleRecallMode() {
+  state.portRecallMode = state.portRecallMode === 'mcq' ? 'type' : 'mcq';
+  renderPortRecall();
+}
+
+function selectPortRecallOption(idx) {
+  if (state.portRecallAnswered) return;
+  const p = state.portMasteryPorts[state.portRecallIdx];
+  const selected = state.portRecallOptions[state.portRecallIdx][idx];
+  const correct = selected === p.port;
+
+  state.portRecallAnswered = true;
+  state.portRecallLastCorrect = correct;
+  state.portRecallLastAnswer = selected;
+
+  if (correct) {
+    state.portRecallScore++;
+    state.stats.correct++;
+  } else {
+    state.portRecallWrong.push(p);
+    state.stats.wrong++;
+  }
+  saveProgress();
   renderPortRecall();
 }
 
@@ -1565,6 +1599,7 @@ function renderPortRecall() {
   const ports = state.portMasteryPorts;
   const idx = state.portRecallIdx;
   const app = document.getElementById('app');
+  const isMCQ = state.portRecallMode === 'mcq';
 
   if (idx >= ports.length) {
     renderPortRecallResults();
@@ -1584,22 +1619,44 @@ function renderPortRecall() {
 
     <div class="quiz-card">
       <div class="recall-q">What port is <strong>${p.service}</strong>?</div>
-      <div class="recall-hint">${p.proto} | ${p.notes}</div>`;
+      <div class="recall-hint">${p.proto} | ${p.notes}</div>
+      <button onclick="toggleRecallMode()" class="btn btn-toggle-mode" style="margin:8px auto;display:block;padding:6px 14px;font-size:12px;opacity:0.7">Switch to ${isMCQ ? 'TYPE' : 'MCQ'} mode</button>`;
 
   if (!state.portRecallAnswered) {
-    html += `
-      <div class="recall-input-row">
-        <input type="number" id="port-answer" class="recall-input" placeholder="Type port number..." autofocus
-          inputmode="numeric" pattern="[0-9]*">
-        <button onclick="checkPortAnswer()" class="btn btn-next" style="width:auto;padding:12px 20px;margin-top:0">Check</button>
-      </div>`;
+    if (isMCQ) {
+      const opts = state.portRecallOptions[idx];
+      html += `<div class="options port-options">`;
+      opts.forEach((opt, i) => {
+        html += `<button class="option port-option" onclick="selectPortRecallOption(${i})">${opt}</button>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `
+        <div class="recall-input-row">
+          <input type="number" id="port-answer" class="recall-input" placeholder="Type port number..." autofocus
+            inputmode="numeric" pattern="[0-9]*">
+          <button onclick="checkPortAnswer()" class="btn btn-next" style="width:auto;padding:12px 20px;margin-top:0">Check</button>
+        </div>`;
+    }
   } else {
     const correct = state.portRecallLastCorrect;
+    if (isMCQ) {
+      const opts = state.portRecallOptions[idx];
+      html += `<div class="options port-options">`;
+      opts.forEach((opt) => {
+        let cls = 'option port-option';
+        if (opt === p.port) cls += ' correct';
+        else if (opt === state.portRecallLastAnswer && opt !== p.port) cls += ' wrong';
+        else cls += ' dimmed';
+        html += `<button class="${cls}" disabled>${opt}</button>`;
+      });
+      html += `</div>`;
+    }
     html += `
       <div class="recall-result ${correct ? 'recall-correct' : 'recall-wrong'}">
         <div class="recall-result-icon">${correct ? 'CORRECT!' : 'WRONG'}</div>
         <div class="recall-result-answer">Port <strong>${p.port}</strong></div>
-        ${!correct ? `<div class="recall-result-yours">You typed: ${state.portRecallLastAnswer}</div>` : ''}
+        ${!correct ? `<div class="recall-result-yours">You picked: ${state.portRecallLastAnswer}</div>` : ''}
       </div>
       <button onclick="nextPortRecall()" class="btn btn-next">Next &rarr;</button>`;
   }
@@ -1607,7 +1664,7 @@ function renderPortRecall() {
   html += `</div>`;
   app.innerHTML = html;
 
-  if (!state.portRecallAnswered) {
+  if (!state.portRecallAnswered && !isMCQ) {
     setTimeout(() => {
       const input = document.getElementById('port-answer');
       if (input) input.focus();
@@ -1791,15 +1848,18 @@ document.addEventListener('keydown', (e) => {
     return;
   }
 
-  // === PORT RECALL — type-the-answer ===
+  // === PORT RECALL — MCQ or type-the-answer ===
   if (state.mode === 'portrecall') {
     if (state.portRecallAnswered) {
       if (key === 'Enter' || key === ' ' || key === 'ArrowRight') {
         e.preventDefault();
         nextPortRecall();
       }
+    } else if (state.portRecallMode === 'mcq') {
+      const num = parseInt(key);
+      if (num >= 1 && num <= 4) selectPortRecallOption(num - 1);
     } else {
-      // Focus the input if user starts typing a number
+      // Type mode — focus the input if user starts typing a number
       const input = document.getElementById('port-answer');
       if (input && /^[0-9]$/.test(key)) {
         input.focus();
