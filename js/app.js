@@ -108,7 +108,7 @@ function renderMenu() {
     </div>
 
     <div class="mode-buttons" style="margin-top:10px">
-      <button onclick="showAllReferences()" class="btn btn-ref-all">CHEAT SHEETS (Ports, Crypto, Networking, IIS)</button>
+      <button onclick="showAllReferences()" class="btn btn-ref-all">CHEAT SHEETS (Ports, Crypto, Net, Events, IIS)</button>
     </div>
 
     <h2 class="section-title">STUDY BATCHES</h2>
@@ -412,6 +412,7 @@ function nextQuestion() {
 }
 
 function renderResults() {
+  state.mode = 'results';
   const total = state.batchQuestions.length;
   const perfect = state.score === total;
   const app = document.getElementById('app');
@@ -666,10 +667,10 @@ function getCryptoHTML() {
     </div>
 
     <div class="ref-section">
-      <h3 class="ref-section-title">Hash Output Lengths</h3>
+      <h3 class="ref-section-title">Hash Digest Lengths</h3>
       <div class="ref-table">
         <div class="ref-table-header ref-cols-4">
-          <span>Algorithm</span><span>Output</span><span>Hex</span><span>Status</span>
+          <span>Algorithm</span><span>Digest</span><span>Hex Chars</span><span>Status</span>
         </div>
         <div class="ref-table-row ref-cols-4">
           <span class="ref-highlight">MD5</span><span>128-bit</span><span>32</span><span class="ref-danger">Broken</span>
@@ -678,7 +679,13 @@ function getCryptoHTML() {
           <span class="ref-highlight">SHA-1</span><span>160-bit</span><span>40</span><span class="ref-danger">Broken</span>
         </div>
         <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">SHA-224</span><span>224-bit</span><span>56</span><span class="ref-safe">Secure</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
           <span class="ref-highlight">SHA-256</span><span>256-bit</span><span>64</span><span class="ref-safe">Secure</span>
+        </div>
+        <div class="ref-table-row ref-cols-4">
+          <span class="ref-highlight">SHA-384</span><span>384-bit</span><span>96</span><span class="ref-safe">Secure</span>
         </div>
         <div class="ref-table-row ref-cols-4">
           <span class="ref-highlight">SHA-512</span><span>512-bit</span><span>128</span><span class="ref-safe">Secure</span>
@@ -688,6 +695,27 @@ function getCryptoHTML() {
         </div>
         <div class="ref-table-row ref-cols-4">
           <span class="ref-highlight">LM</span><span>128-bit</span><span>32</span><span class="ref-danger">Very weak (7+7, DES)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Exam Distractors — Don't Mix These Up!</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Value</span><span>What It Actually Is</span><span>NOT</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">56 bits</span><span>DES key length</span><span class="ref-danger">Not a hash digest</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">128 bits</span><span>MD5 digest / AES smallest key</span><span class="ref-danger">Not SHA — it's MD5</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">192 bits</span><span>AES key size option</span><span class="ref-danger">Not a hash digest</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-highlight">256 bits</span><span>SHA-256 digest / AES key size</span><span class="ref-danger">Both — know which context</span>
         </div>
       </div>
     </div>
@@ -1042,6 +1070,180 @@ function getNetworkHTML() {
     </div>`;
 }
 
+function getWindowsEventsHTML() {
+  return `
+    <div id="ref-events">
+      <h2 class="ref-page-title">WINDOWS EVENT IDs</h2>
+      <p class="port-ref-subtitle">Critical Event IDs for security monitoring, incident response &amp; forensics.</p>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Authentication &amp; Logon</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Event ID</span><span>Name</span><span>Why It Matters</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4624</span><span>Successful Logon</span><span>Baseline for all logon activity</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4625</span><span>Failed Logon</span><span class="ref-warn">Brute force / password spray indicator</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4672</span><span>Special Privileges Assigned</span><span class="ref-danger">Admin logon &mdash; tracks privileged access</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4634</span><span>Logoff</span><span>Session duration analysis</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4648</span><span>Logon Using Explicit Creds</span><span class="ref-warn">RunAs / lateral movement indicator</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4768</span><span>Kerberos TGT Requested</span><span>Initial Kerberos authentication</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4769</span><span>Kerberos Service Ticket</span><span class="ref-warn">Kerberoasting detection</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4771</span><span>Kerberos Pre-Auth Failed</span><span class="ref-warn">AS-REP roasting / password guessing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Logon Types (inside Event 4624/4625)</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Type</span><span>Name</span><span>Description</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">2</span><span>Interactive</span><span>Console / physical logon</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">3</span><span>Network</span><span>SMB, mapped drives, net use</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4</span><span>Batch</span><span>Scheduled tasks</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">5</span><span>Service</span><span>Service startup</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">7</span><span>Unlock</span><span>Workstation unlock</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">9</span><span>NewCredentials</span><span>RunAs /netonly</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">10</span><span>RemoteInteractive</span><span class="ref-danger">RDP logon</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">11</span><span>CachedInteractive</span><span>Cached domain creds (offline)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Account &amp; Group Changes</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Event ID</span><span>Name</span><span>Why It Matters</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4720</span><span>User Account Created</span><span class="ref-warn">Backdoor account detection</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4722</span><span>User Account Enabled</span><span>Reactivated accounts</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4724</span><span>Password Reset Attempt</span><span class="ref-warn">Unauthorized password resets</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4725</span><span>User Account Disabled</span><span>Account lifecycle tracking</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4726</span><span>User Account Deleted</span><span class="ref-warn">Evidence destruction</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4728</span><span>Member Added to Security Group</span><span class="ref-danger">Privilege escalation via group</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4732</span><span>Member Added to Local Group</span><span class="ref-danger">Local admin escalation</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4740</span><span>Account Locked Out</span><span>Brute force confirmation</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4767</span><span>Account Unlocked</span><span>Insider or social engineering</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Process, Policy &amp; System</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-3">
+          <span>Event ID</span><span>Name</span><span>Why It Matters</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4688</span><span>New Process Created</span><span class="ref-danger">Malware execution / LOLBins</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4689</span><span>Process Exited</span><span>Process lifecycle</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4697</span><span>Service Installed</span><span class="ref-warn">Persistence mechanism</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">4719</span><span>Audit Policy Changed</span><span class="ref-danger">Attacker covering tracks</span>
+        </div>
+        <div class="ref-table-row ref-cols-3 ref-row-danger">
+          <span class="ref-accent">1102</span><span>Audit Log Cleared</span><span class="ref-danger">Anti-forensics &mdash; always investigate!</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4698</span><span>Scheduled Task Created</span><span class="ref-warn">Persistence / lateral movement</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">4663</span><span>Object Access Attempted</span><span>File/folder access auditing</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">5140</span><span>Network Share Accessed</span><span>Lateral movement via shares</span>
+        </div>
+        <div class="ref-table-row ref-cols-3">
+          <span class="ref-accent">5156</span><span>Windows Firewall Allowed</span><span>Network connection auditing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <h3 class="ref-section-title">Quick Recall</h3>
+      <div class="ref-table">
+        <div class="ref-table-header ref-cols-2">
+          <span>Scenario</span><span>Event IDs to Check</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Brute force attack</span><span class="ref-accent">4625 (many) &rarr; 4624 (success) &rarr; 4672 (admin?)</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Lateral movement</span><span class="ref-accent">4648 + 4624 Type 3/10 + 5140</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Privilege escalation</span><span class="ref-accent">4672 + 4728/4732</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Persistence</span><span class="ref-accent">4697 + 4698 + 4720</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Anti-forensics</span><span class="ref-accent">1102 + 4719</span>
+        </div>
+        <div class="ref-table-row ref-cols-2">
+          <span class="ref-muted">Kerberos attacks</span><span class="ref-accent">4768 + 4769 + 4771</span>
+        </div>
+      </div>
+      <p class="ref-note">Key exam tip: 4672 = admin logon (special privileges). 1102 = log cleared (always suspicious). 4625 = failed logon (brute force). 4688 = process created (malware hunting).</p>
+    </div>
+    </div>`;
+}
+
 function showAllReferences() {
   state.mode = 'allref';
   const ports = getPortsData();
@@ -1057,12 +1259,14 @@ function showAllReferences() {
       <a href="#ref-ports" onclick="smoothJump('ref-ports')">Ports</a>
       <a href="#ref-crypto" onclick="smoothJump('ref-crypto')">Crypto</a>
       <a href="#ref-net" onclick="smoothJump('ref-net')">Networking</a>
+      <a href="#ref-events" onclick="smoothJump('ref-events')">Event IDs</a>
       <a href="#ref-iis" onclick="smoothJump('ref-iis')">IIS / Exam</a>
     </div>`;
 
   html += getPortsHTML(ports);
   html += getCryptoHTML();
   html += getNetworkHTML();
+  html += getWindowsEventsHTML();
   html += getIISHTML();
 
   app.innerHTML = html;
@@ -1078,6 +1282,7 @@ function smoothJump(id) {
 function showPortReference() { showAllReferences(); setTimeout(() => smoothJump('ref-ports'), 50); }
 function showCryptoReference() { showAllReferences(); setTimeout(() => smoothJump('ref-crypto'), 50); }
 function showNetworkReference() { showAllReferences(); setTimeout(() => smoothJump('ref-net'), 50); }
+function showEventsReference() { showAllReferences(); setTimeout(() => smoothJump('ref-events'), 50); }
 function showIISReference() { showAllReferences(); setTimeout(() => smoothJump('ref-iis'), 50); }
 
 // === PORT MASTERY ===
@@ -1293,6 +1498,7 @@ function nextPortRecall() {
 }
 
 function renderPortRecallResults() {
+  state.mode = 'portrecallresults';
   const total = state.portMasteryPorts.length;
   const perfect = state.portRecallScore === total;
   const app = document.getElementById('app');
@@ -1352,21 +1558,128 @@ function resetProgress() {
   }
 }
 
-// Keyboard shortcuts
+// Keyboard navigation — works across ALL modes
 document.addEventListener('keydown', (e) => {
+  // Don't hijack keys when typing in an input
+  const tag = e.target.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') {
+    // In port recall input, Enter submits or advances
+    if (e.key === 'Enter' && state.mode === 'portrecall') {
+      e.preventDefault();
+      if (state.portRecallAnswered) nextPortRecall();
+      else checkPortAnswer();
+    }
+    return;
+  }
+
+  const key = e.key;
+
+  // === GLOBAL: Escape goes back / to menu ===
+  if (key === 'Escape') {
+    e.preventDefault();
+    if (state.mode === 'portlearn' || state.mode === 'portrecall' || state.mode === 'portrecallresults') {
+      showPortMastery();
+    } else if (state.mode !== 'menu') {
+      goMenu();
+    }
+    return;
+  }
+
+  // === MENU MODE ===
+  if (state.mode === 'menu') {
+    if (key === '1') showPortMastery();
+    else if (key === '2') startPortDrill();
+    else if (key === '3') startRandomMix();
+    else if (key === '4') startWeakAreas();
+    else if (key === '5') showAllReferences();
+    return;
+  }
+
+  // === QUIZ & PORT DRILL (MCQ modes) ===
   if (state.mode === 'quiz' || state.mode === 'portdrill') {
     if (!state.answered) {
-      const num = parseInt(e.key);
+      const num = parseInt(key);
       if (num >= 1 && num <= 4) {
         if (state.mode === 'portdrill') selectPortOption(num - 1);
         else selectOption(num - 1);
       }
     } else {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+      if (key === 'Enter' || key === ' ' || key === 'ArrowRight') {
         e.preventDefault();
         nextQuestion();
       }
     }
+    return;
+  }
+
+  // === PORT MASTERY — batch selection ===
+  if (state.mode === 'portmastery') {
+    const num = parseInt(key);
+    const batches = getPortBatches();
+    if (num >= 1 && num <= 9 && num <= batches.length && isPortBatchUnlocked(num - 1)) {
+      startPortLearn(num - 1);
+    }
+    return;
+  }
+
+  // === PORT LEARN — flashcards ===
+  if (state.mode === 'portlearn') {
+    if (key === ' ' || key === 'Enter' || key === 'f') {
+      e.preventDefault();
+      const card = document.querySelector('.flash-card');
+      if (card) card.classList.toggle('flipped');
+    } else if (key === 'ArrowLeft' && state.portLearnIdx > 0) {
+      e.preventDefault();
+      state.portLearnIdx--;
+      renderPortLearn();
+    } else if (key === 'ArrowRight') {
+      e.preventDefault();
+      if (state.portLearnIdx < state.portMasteryPorts.length - 1) {
+        state.portLearnIdx++;
+        renderPortLearn();
+      } else {
+        startPortRecall(state.portMasteryBatch);
+      }
+    }
+    return;
+  }
+
+  // === PORT RECALL — type-the-answer ===
+  if (state.mode === 'portrecall') {
+    if (state.portRecallAnswered) {
+      if (key === 'Enter' || key === ' ' || key === 'ArrowRight') {
+        e.preventDefault();
+        nextPortRecall();
+      }
+    } else {
+      // Focus the input if user starts typing a number
+      const input = document.getElementById('port-answer');
+      if (input && /^[0-9]$/.test(key)) {
+        input.focus();
+      }
+    }
+    return;
+  }
+
+  // === RESULTS SCREENS ===
+  if (state.mode === 'results' || state.mode === 'portrecallresults') {
+    if (key === 'Enter' || key === ' ') {
+      e.preventDefault();
+      // Click the first prominent button (retry / next batch / menu)
+      const btn = document.querySelector('.results-buttons .btn');
+      if (btn) btn.click();
+    }
+    return;
+  }
+
+  // === REFERENCE SHEETS ===
+  if (state.mode === 'allref') {
+    if (key === '1') smoothJump('ref-ports');
+    else if (key === '2') smoothJump('ref-crypto');
+    else if (key === '3') smoothJump('ref-net');
+    else if (key === '4') smoothJump('ref-events');
+    else if (key === '5') smoothJump('ref-iis');
+    return;
   }
 });
 
